@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Educação Financeira: Descomplicando a Bolsa</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .content-tab { display: none; animation: fadeIn 0.5s; }
+        .content-tab.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #3498db; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary .fa-chevron-down { transform: rotate(180deg); }
+        details summary .fa-chevron-down { transition: transform 0.2s; }
+        .quiz-option:hover { background-color: #f0f4ff; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 8px; }
+        .input-group input { border-radius: 0.375rem; border: 1px solid #D1D5DB; padding: 0.5rem 0.75rem; }
+        .input-group input[type="text"] { flex-grow: 1; }
+        .input-group input[type="number"] { width: 120px; }
+        .remove-btn { background: none; border: none; color: #EF4444; cursor: pointer; padding: 0.5rem; }
+        .remove-btn:hover { color: #B91C1C; }
+        .amortization-table-container { max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-600 mb-2">Descomplicando a Bolsa</h1>
+            <p class="text-lg text-gray-600">Sua jornada completa no mundo dos investimentos, do básico ao avançado.</p>
+        </header>
+
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Menu de Navegação Lateral -->
+            <aside class="w-full md:w-1/4">
+                <nav class="sticky top-8 bg-white p-4 rounded-lg shadow-md">
+                    <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Jornada do Investidor</p>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="nav-link active font-semibold text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="inicio"><i class="fas fa-flag-checkered w-5 text-center"></i> Ponto de Partida</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="fundamentos-ed-financeira"><i class="fas fa-lightbulb w-5 text-center"></i> Educação Financeira</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="calculadora-financeira"><i class="fas fa-calculator w-5 text-center"></i> Planejamento na Prática</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="credito-dividas"><i class="fas fa-credit-card w-5 text-center"></i> Crédito, Dívidas e Proteção</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="simulador-financiamento"><i class="fas fa-house-medical-circle-check w-5 text-center"></i> Simulador de Financiamento</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="cenario"><i class="fas fa-map-signs w-5 text-center"></i> Entendendo o Cenário</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="juros-compostos"><i class="fas fa-magic-wand-sparkles w-5 text-center"></i> A Mágica dos Juros</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="renda-fixa"><i class="fas fa-shield-halved w-5 text-center"></i> Renda Fixa: A Base</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="fundos-investimento"><i class="fas fa-users-cog w-5 text-center"></i> Fundos de Investimento</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="renda-variavel"><i class="fas fa-rocket w-5 text-center"></i> Renda Variável: O Básico</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="renda-variavel-aprofundado"><i class="fas fa-magnifying-glass-chart w-5 text-center"></i> Aprofundando em Ações</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="previdencia"><i class="fas fa-umbrella-beach w-5 text-center"></i> Foco no Futuro: Previdência</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="montando-carteira"><i class="fas fa-pie-chart w-5 text-center"></i> Montando sua Carteira</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="planejando-legado"><i class="fas fa-gem w-5 text-center"></i> Planejando seu Legado</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="imposto-renda"><i class="fas fa-file-invoice-dollar w-5 text-center"></i> Guia do Imposto de Renda</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="mente-investidor"><i class="fas fa-brain w-5 text-center"></i> Mente de Investidor</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="conhecimento-acao"><i class="fas fa-cogs w-5 text-center"></i> Do Conhecimento à Ação</a></li>
+                        <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mt-4 mb-3">Ferramentas com IA</p>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="busca-ia"><i class="fas fa-search-dollar w-5 text-center"></i> Busca Inteligente ✨</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="analise-ia"><i class="fas fa-robot w-5 text-center"></i> Análise de Ações ✨</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="glossario-ia"><i class="fas fa-book-sparkles w-5 text-center"></i> Glossário Inteligente ✨</a></li>
+                        <li><a href="#" class="nav-link text-gray-700 hover:bg-gray-100 hover:text-blue-600 flex items-center gap-3 p-2 rounded-md" data-tab="glossario-rapido"><i class="fas fa-book w-5 text-center"></i> Glossário Rápido</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Conteúdo Principal -->
+            <main class="w-full md:w-3/4">
+                <div id="content-area" class="bg-white p-6 md:p-8 rounded-lg shadow-lg min-h-[600px]">
+                    <!-- Conteúdo da Aba Início -->
+                    <div id="inicio" class="content-tab active">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Seu Ponto de Partida</h2>
+                        <p class="mb-4">Bem-vindo(a) ao seu guia completo de finanças e investimentos. Este portal foi reestruturado para oferecer uma jornada de aprendizado lógica e gradual, pensada para quem está começando do zero.</p>
+                        <p class="mb-4">Siga a ordem do menu ao lado para construir seu conhecimento passo a passo, dos conceitos mais básicos até as estratégias mais elaboradas. Vamos começar a transformar sua relação com o dinheiro!</p>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md mt-6">
+                            <p><strong>Dica:</strong> Use nossas novas <strong>Ferramentas com IA</strong> ✨ para analisar ações, criar planos de ação e tirar dúvidas sobre termos financeiros!</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo da Aba Fundamentos de Educação Financeira -->
+                    <div id="fundamentos-ed-financeira" class="content-tab">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Educação Financeira: O Alicerce</h2>
+                        <p class="mb-4">Antes de investir, precisamos arrumar a casa. A educação financeira é o alicerce sobre o qual você construirá sua riqueza. Ela se baseia em pilares simples e responde a dúvidas essenciais.</p>
+                        <div class="space-y-4 mt-6">
+                            <div class="flex items-start gap-4"><i class="fas fa-file-invoice-dollar text-2xl text-green-500 mt-1"></i><div><h4 class="font-semibold">1. Orçamento: Saiba para onde vai seu dinheiro</h4><p>Anote todos os seus ganhos e gastos por um mês. Use um caderno ou um aplicativo. O objetivo é entender seus hábitos e identificar onde você pode economizar.</p></div></div>
+                            <div class="flex items-start gap-4"><i class="fas fa-bullseye text-2xl text-blue-500 mt-1"></i><div><h4 class="font-semibold">2. Metas Financeiras: Dê um propósito ao seu dinheiro</h4><p>Por que você quer investir? Para a aposentadoria? Uma viagem? Comprar um carro? Ter metas claras te dá motivação para poupar e investir com disciplina.</p></div></div>
+                            <div class="flex items-start gap-4"><i class="fas fa-chart-line text-2xl text-purple-500 mt-1"></i><div><h4 class="font-semibold">3. Poupar para Investir: Faça o dinheiro trabalhar para você</h4><p>A regra é simples: gaste menos do que ganha e invista a diferença. Mesmo que seja pouco no começo, o hábito de investir regularmente é o que gera o efeito "bola de neve" dos juros compostos.</p></div></div>
+                            <!-- NOVA SEÇÃO: IDADE PARA COMEÇAR -->
+                            <details class="p-4 border rounded-lg bg-gray-50">
+                                <summary class="font-semibold flex justify-between items-center">Com quantos anos posso começar a investir? <i class="fas fa-chevron-down"></i></summary>
+                                <div class="mt-2 space-y-2">
+                                    <p>Não existe idade mínima para começar a investir! Quanto mais cedo, melhor, pois o tempo é o maior aliado do investidor graças aos juros compostos.</p>
+                                    <p><strong>Para menores de idade:</strong> É necessário que um dos pais ou o responsável legal abra a conta em uma corretora no nome do menor. O processo é simples e exige os documentos de ambos (responsável e menor), incluindo o CPF da criança ou adolescente. É uma excelente forma de educação financeira na prática!</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo da Aba Calculadora Financeira -->
+                    <div id="calculadora-financeira" class="content-tab">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Planejamento na Prática: Calculadora Financeira</h2>
+                        <p class="mb-6">Entenda para onde vai seu dinheiro e tome o controle da sua vida financeira. Preencha os campos abaixo para ter um diagnóstico instantâneo.</p>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-semibold mb-4 text-green-600 flex items-center gap-2"><i class="fas fa-arrow-down"></i> Fontes de Renda</h3>
+                                <div id="income-list">
+                                    <div class="input-group"><input type="text" placeholder="Ex: Salário" value="Salário" class="income-source"><input type="number" placeholder="R$ 0,00" class="income-value"><button class="remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></button></div>
+                                </div>
+                                <button id="add-income" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800"><i class="fas fa-plus-circle"></i> Adicionar Renda</button>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-semibold mb-4 text-red-600 flex items-center gap-2"><i class="fas fa-arrow-up"></i> Despesas Mensais</h3>
+                                <div id="expense-list">
+                                    <div class="input-group"><input type="text" placeholder="Ex: Moradia" value="Moradia (Aluguel, Condomínio)" class="expense-source"><input type="number" placeholder="R$ 0,00" class="expense-value"><button class="remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></button></div>
+                                    <div class="input-group"><input type="text" placeholder="Ex: Transporte" value="Transporte (Combustível, App)" class="expense-source"><input type="number" placeholder="R$ 0,00" class="expense-value"><button class="remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></button></div>
+                                </div>
+                                <button id="add-expense" class="mt-2 text-sm font-semibold text-blue-600 hover:text-blue-800"><i class="fas fa-plus-circle"></i> Adicionar Despesa</button>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-6 border-t">
+                            <h3 class="text-2xl font-semibold mb-4 text-gray-800 text-center">Seu Diagnóstico Financeiro</h3>
+                            <div class="grid md:grid-cols-3 gap-4 text-center">
+                                <div class="p-4 bg-green-50 rounded-lg"><p class="text-sm font-semibold text-green-800">Total de Renda</p><p id="total-income" class="text-3xl font-bold text-green-600">R$ 0,00</p></div>
+                                <div class="p-4 bg-red-50 rounded-lg"><p class="text-sm font-semibold text-red-800">Total de Despesas</p><p id="total-expenses" class="text-3xl font-bold text-red-600">R$ 0,00</p></div>
+                                <div id="balance-card" class="p-4 bg-gray-100 rounded-lg"><p class="text-sm font-semibold text-gray-800">Saldo Mensal</p><p id="monthly-balance" class="text-3xl font-bold text-gray-600">R$ 0,00</p></div>
+                            </div>
+                            <div class="mt-6">
+                                <div class="w-full bg-gray-200 rounded-full h-4"><div id="expense-bar" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div></div>
+                                <p id="expense-percentage" class="text-center text-sm mt-2 font-semibold text-gray-600">Suas despesas comprometem 0% da sua renda.</p>
+                            </div>
+                            <div class="text-center mt-6">
+                                <button id="generate-plan-button" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 mx-auto disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                    <i class="fas fa-wand-magic-sparkles"></i> ✨ Criar Plano de Ação com IA
+                                </button>
+                            </div>
+                            <div id="plan-loader" class="hidden mt-4"><div class="loader"></div><p class="text-center text-gray-600">Analisando seu orçamento e criando um plano...</p></div>
+                            <div id="suggestions" class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-md hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo da Aba Crédito, Dívidas e Proteção -->
+                    <div id="credito-dividas" class="content-tab">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Crédito, Dívidas e Proteção</h2>
+                        <p class="mb-6">Saber usar o crédito a seu favor e se proteger de imprevistos e fraudes é tão importante quanto saber investir.</p>
+                        <div class="space-y-4">
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">Uso Consciente do Crédito <i class="fas fa-chevron-down"></i></summary><p class="mt-2">Crédito é uma ferramenta. Use-o para realizar grandes objetivos (financiamento imobiliário) ou para emergências, mas evite-o para gastos supérfluos. Entenda a diferença entre Tabela Price (parcelas fixas) e SAC (parcelas decrescentes) em financiamentos.</p></details>
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">A Importância dos Seguros <i class="fas fa-chevron-down"></i></summary><p class="mt-2">Seguros (de vida, saúde, residencial) não são gastos, são investimentos na sua tranquilidade. Eles protegem seu patrimônio e sua família de eventos inesperados, evitando que um imprevisto destrua seu planejamento financeiro.</p></details>
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">Seus Direitos como Consumidor Financeiro <i class="fas fa-chevron-down"></i></summary><p class="mt-2">Você tem direito à informação clara, à quitação antecipada de dívidas com desconto de juros e à proteção contra práticas abusivas como a venda casada. Conheça seus direitos e, se necessário, recorra a órgãos como o Procon e o Banco Central.</p></details>
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">Cibersegurança: Proteja seu Dinheiro Digital <i class="fas fa-chevron-down"></i></summary><p class="mt-2">Desconfie de ofertas milagrosas, não clique em links suspeitos, use senhas fortes e ative a autenticação de dois fatores em seus aplicativos financeiros. O conhecimento é a melhor defesa contra golpes de Pix, phishing e boletos falsos.</p></details>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo da Aba Simulador de Financiamento -->
+                    <div id="simulador-financiamento" class="content-tab">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Simulador de Financiamento: Price vs. SAC</h2>
+                        <p class="mb-6">Vai financiar um imóvel ou veículo? Entenda a diferença entre os dois principais sistemas de amortização e veja qual se encaixa melhor no seu bolso.</p>
+                        
+                        <div class="p-4 border rounded-lg bg-blue-50 mb-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-700">Simule seu Financiamento</h3>
+                            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                                <div><label for="loanAmount" class="font-semibold text-sm">Valor do Financiamento (R$)</label><input type="number" id="loanAmount" value="200000" class="w-full p-2 border rounded-md"></div>
+                                <div><label for="annualInterestRate" class="font-semibold text-sm">Taxa de Juros Anual (%)</label><input type="number" id="annualInterestRate" value="9.5" class="w-full p-2 border rounded-md"></div>
+                                <div><label for="loanTermMonths" class="font-semibold text-sm">Prazo (Meses)</label><input type="number" id="loanTermMonths" value="360" class="w-full p-2 border rounded-md"></div>
+                            </div>
+                            <button id="calculate-loan" class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">Simular</button>
+                        </div>
+
+                        <div id="loan-results" class="hidden">
+                            <div id="loan-summary" class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md"></div>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Tabela Price -->
+                                <div>
+                                    <h3 class="text-2xl font-semibold mb-2 text-gray-800">Tabela Price</h3>
+                                    <p class="text-sm mb-1"><strong>Característica:</strong> Parcelas fixas do início ao fim.</p>
+                                    <p class="text-sm mb-3"><strong>Ideal para:</strong> Quem precisa de previsibilidade e não pode pagar parcelas altas no começo.</p>
+                                    <div id="price-summary" class="text-sm p-3 bg-gray-100 rounded-md mb-3 space-y-1"></div>
+                                    <div class="amortization-table-container border rounded-lg">
+                                        <table class="w-full text-sm text-left">
+                                            <thead class="bg-gray-100 sticky top-0"><tr><th class="p-2">Mês</th><th class="p-2">Parcela</th><th class="p-2">Juros</th><th class="p-2">Amortização</th><th class="p-2">Saldo Devedor</th></tr></thead>
+                                            <tbody id="price-table-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Tabela SAC -->
+                                <div>
+                                    <h3 class="text-2xl font-semibold mb-2 text-gray-800">Tabela SAC</h3>
+                                    <p class="text-sm mb-1"><strong>Característica:</strong> Parcelas diminuem com o tempo.</p>
+                                    <p class="text-sm mb-3"><strong>Ideal para:</strong> Quem pode arcar com parcelas maiores no início para quitar a dívida mais rápido e pagar menos juros no total.</p>
+                                    <div id="sac-summary" class="text-sm p-3 bg-gray-100 rounded-md mb-3 space-y-1"></div>
+                                    <div class="amortization-table-container border rounded-lg">
+                                        <table class="w-full text-sm text-left">
+                                            <thead class="bg-gray-100 sticky top-0"><tr><th class="p-2">Mês</th><th class="p-2">Parcela</th><th class="p-2">Juros</th><th class="p-2">Amortização</th><th class="p-2">Saldo Devedor</th></tr></thead>
+                                            <tbody id="sac-table-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="extra-amortization-section" class="mt-8 pt-6 border-t-2 border-dashed">
+                                <h3 class="text-2xl font-semibold mb-4 text-center text-green-700">Simule o Poder da Amortização Extra</h3>
+                                <p class="text-center text-sm mb-4">Veja o impacto de fazer um pagamento extra (com seu 13º, por exemplo) para abater o saldo devedor e quitar as últimas parcelas.</p>
+                                <div class="p-4 border-2 border-dashed border-green-400 rounded-lg bg-green-50">
+                                    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                                        <div>
+                                            <label for="extraPaymentValue" class="font-semibold text-sm">Valor do Pagamento Extra (R$)</label>
+                                            <input type="number" id="extraPaymentValue" value="10000" class="w-full md:w-auto p-2 border rounded-md">
+                                        </div>
+                                        <button id="simulate-extra-payment" class="bg-green-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-green-700 transition-colors mt-4 md:mt-0">Simular Amortização</button>
+                                    </div>
+                                    <div id="extra-payment-results" class="hidden mt-4 text-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo da Aba Entendendo o Cenário -->
+                    <div id="cenario" class="content-tab">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2">Entendendo o Cenário</h2>
+                        <p class="mb-6">Antes de entrar em campo, é preciso conhecer as regras e os jogadores. O mercado financeiro tem suas próprias instituições e dinâmicas que você precisa entender.</p>
+                        <div class="space-y-4">
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">As Instituições: Quem Manda no Jogo? <i class="fas fa-chevron-down"></i></summary><div class="mt-2 space-y-2"><p><strong>B3 (A Bolsa):</strong> É o "campo" onde as negociações acontecem. Ela garante que a compra e venda de ativos ocorra de forma segura e organizada.</p><p><strong>CVM (O Árbitro):</strong> A Comissão de Valores Mobiliários é o "juiz" do mercado. Ela fiscaliza, cria as regras e protege os investidores contra práticas ilegais.</p><p><strong>Corretoras (Os Times):</strong> São as intermediárias que conectam você, o investidor, ao "campo" (a B3). É através delas que você envia suas ordens de compra e venda.</p></div></details>
+                            <!-- NOVA SEÇÃO: PLATAFORMAS SEGURAS -->
+                            <details class="p-4 border rounded-lg bg-gray-50">
+                                <summary class="font-semibold flex justify-between items-center">Como escolher uma plataforma (Corretora) segura e gratuita? <i class="fas fa-chevron-down"></i></summary>
+                                <div class="mt-2 space-y-3">
+                                    <div>
+                                        <h5 class="font-semibold text-blue-600">Segurança em Primeiro Lugar</h5>
+                                        <p>Uma corretora segura é, antes de tudo, regulada pelo <strong>Banco Central</strong> e pela <strong>CVM</strong>. Além disso, para investimentos como CDB, LCI, LCA e poupança, verifique se a instituição tem a proteção do <strong>FGC (Fundo Garantidor de Créditos)</strong>, que garante seu dinheiro em até R$ 250 mil por CPF.</p>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold text-blue-600">Entendendo o "Gratuito"</h5>
+                                        <p>Muitas das grandes corretoras oferecem **"taxa de corretagem zero"** para a maioria dos investimentos, como compra e venda de Ações, Fundos Imobiliários (FIIs) e ETFs. Isso significa que você não paga para executar essas ordens. Fique atento, pois algumas taxas podem existir, como a taxa de custódia do Tesouro Direto, que é cobrada pela própria B3. Sempre consulte a tabela de custos da corretora antes de abrir sua conta.</p>
+                                    </div>
+                                </div>
+                            </details>
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">Os Mercados: Primário vs. Secundário <i class="fas fa-chevron-down"></i></summary><div class="mt-2 space-y-2"><p><strong>Mercado Primário:</strong> É onde as ações "nascem". Quando uma empresa abre o capital (IPO), ela vende suas ações pela primeira vez para captar dinheiro. O recurso vai direto para o caixa da empresa.</p><p><strong>Mercado Secundário:</strong> É o dia a dia da bolsa, onde os investidores negociam entre si as ações que já existem. Aqui, o dinheiro troca de mãos entre investidores, não vai para a empresa.</p></div></details>
+                            <details class="p-4 border rounded-lg bg-gray-50"><summary class="font-semibold flex justify-between items-center">Os Participantes: Quem está Jogando? <i class="fas fa-chevron-down"></i></summary><div class="mt-2 space-y-2"><p><strong>Investidores Individuais (Pessoas Físicas):</strong> Somos nós, investindo nosso dinheiro para realizar objetivos.</p><p><strong>Investidores Institucionais:</strong> São os "jogadores peso-pesado", como fundos de pensão e grandes fundos de investimento. Eles movimentam grandes volumes de dinheiro e influenciam o mercado.</p><p><strong>Investidores Estrangeiros:</strong> Grandes fundos e investidores de outros países que aplicam no Brasil. A entrada e saída deles também impacta fortemente a bolsa.</p></div></details>
+                        </div>
+                    </div>
+
+                    <!-- O resto do seu HTML continua aqui... -->
+                    <!-- ... -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Todo o seu JavaScript permanece o mesmo
+        // ...
+    </script>
+
+</body>
+</html>
